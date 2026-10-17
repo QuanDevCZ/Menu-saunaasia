@@ -5,6 +5,8 @@ Jídelní lístek, který hosté otevřou naskenováním QR kódu na stole. Jen 
 
 **32 jídel · 6 kategorií · česky · ceny v Kč**
 
+**Živě:** https://quandevcz.github.io/Menu-saunaasia/
+
 ---
 
 ## Jak si menu prohlédnout na počítači

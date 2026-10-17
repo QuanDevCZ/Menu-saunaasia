@@ -150,6 +150,22 @@ Consequences for anyone changing the photos:
   median per channel, nudge each image toward the set median). A single new dish
   dropped in without that pass will not sit on the same wood as its neighbours.
 
+## Security
+
+GitHub Pages cannot send response headers, so `index.html` carries a
+Content-Security-Policy `<meta>`: own scripts, images and JSON only, plus Google Fonts
+(`fonts.googleapis.com` styles, `fonts.gstatic.com` files). **Adding any outside
+resource — a CDN script, an analytics tag, a remote image — means adding its origin to
+that policy, or the browser silently blocks it.** Inline `<script>`, `style="…"`
+attributes and `innerHTML` with markup are blocked too; keep building DOM with
+`createElement` / `textContent`, as `app.js` does.
+
+`tools/qr.html` pins qrcodejs with an SRI hash. Changing the library version means
+taking the new hash from cdnjs.
+
+Every file in the repo is public at the site URL, including `plan.txt` and this file.
+Never commit anything private.
+
 ## Known issues
 
 - **Dish photos total 4.1 MB** (32 × 800px WebP, ~130 KB each) — down from 6.4 MB of
@@ -160,8 +176,9 @@ Consequences for anyone changing the photos:
   generated before the prompt pinned the grain direction, so their oak runs vertically
   where the other 30 run horizontally. Colour-matching evened the tone but cannot
   rotate grain. Re-rendering the pair costs 6 Higgsfield credits.
-- **`tools/qr.html` has never been run in a browser** — it loads qrcodejs from cdnjs.
-  Verify by scanning with a real phone before printing table cards.
+- **`tools/qr.html` has run only in headless Chrome** (2026-10-05) — it builds the
+  canvas. The printed code is `qr/menu-qr.svg`; scan it with a real phone before
+  printing table cards.
 - **`restaurant.tagline` is still design-system placeholder text.** `name`, `address`
   and `phone` are real as of 2026-09-17. `hours` was removed from the header at the
   client's request (2026-10-03); re-adding the key brings it back with no code change. Note `name` renders in two places —

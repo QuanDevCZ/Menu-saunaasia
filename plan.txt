@@ -516,3 +516,28 @@ CHANGES AFTER THE FIRST REVIEW
   QR generated: qr/menu-qr.png (1200px) and qr/menu-qr.svg (vector, for print),
   error correction M, 4-module quiet zone. Decoded back with jsQR -> URL matches.
   Still to do: enable Pages, scan with a real phone on mobile data, print.
+
+2026-10-05 — Connectivity decision
+  No guest Wi-Fi. Guests open the menu on their own mobile data; paper menus stay as
+  the fallback. If Wi-Fi is wanted later: separate guest network on the router, then
+  a WIFI: QR code on its own small card (cheap to reprint if the password changes).
+  Pages is live: https://webjohn7.github.io/Menu-saunaasia/ and data/menu.json both 200.
+  Domain decision (2026-10-05): stay on https://webjohn7.github.io/Menu-saunaasia/.
+  No custom domain. (saunaasia.cz was unregistered on 2026-10-05 if this changes.)
+  The printed QR (qr/menu-qr.svg) encodes this URL, so the repo name must not change.
+
+2026-10-05 — Security pass
+  Findings: static site, no forms, no accounts, no secrets in the repo, no innerHTML
+  (all DOM is built with textContent/createElement), HTTPS already forced (http -> 301).
+  Changes:
+  - index.html: Content-Security-Policy <meta> (GitHub Pages can't send headers).
+    Only own scripts/images/JSON; styles also from fonts.googleapis.com, fonts from
+    fonts.gstatic.com; no forms, no <base>, no plugins. Plus referrer policy.
+  - tools/qr.html: qrcodejs pinned with cdnjs's SRI hash (sha512), so a changed CDN
+    file is refused instead of run.
+  Verified in headless Chrome at 390px: index, #/nudle, #/alergeny render, 4 photos
+  load, Google Fonts load, zero CSP violations; qr.html builds the QR canvas.
+  Not possible on GitHub Pages: frame-ancestors / X-Frame-Options (header-only).
+  Low impact here: the menu has nothing to click-jack.
+  Note: every file in the repo is public at the site URL (plan.txt, CLAUDE.md,
+  menu/ scans, design system). Nothing secret in them; the repo is public anyway.
